@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cliente Final - Catálogo Farmacéutico</title>
+    <title>Cliente Final - Catálogo Farmacéutico & Carrito</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -24,7 +24,12 @@
 </head>
 <body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
 
-    <!-- ENCABEZADO Y MENÚ DE NAVEGACIÓN (HEADER) -->
+    @php
+        $carritoSesion = session('carrito', []);
+        $itemsEnCarrito = count($carritoSesion);
+    @endphp
+
+    <!-- ENCABEZADO Y MENÚ DE NAVEGACIÓN (HEADER CON ICONO DE CARRITO) -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -36,27 +41,36 @@
                     </div>
                     <div>
                         <span class="text-lg font-black text-slate-900 tracking-tight block leading-tight">FarmaCliente</span>
-                        <span class="text-[10px] font-bold text-blue-600 tracking-widest uppercase block">Sitio Web Público</span>
+                        <span class="text-[10px] font-bold text-blue-600 tracking-widest uppercase block">Sitio Web & Carrito</span>
                     </div>
                 </a>
 
-                <!-- MENÚ DE NAVEGACIÓN (CONECTANDO LAS 5 PÁGINAS) -->
+                <!-- MENÚ DE NAVEGACIÓN Y BOTÓN CARRITO -->
                 <nav class="flex items-center gap-2">
-                    <a href="{{ url('/inicio') }}" class="px-3.5 py-2 rounded-xl text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all inline-flex items-center gap-1.5">
+                    <a href="{{ url('/inicio') }}" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all inline-flex items-center gap-1.5">
                         <i class="bi bi-house-door-fill text-blue-600"></i>
                         <span>Inicio</span>
                     </a>
-                    <a href="{{ url('/nosotros') }}" class="px-3.5 py-2 rounded-xl text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all inline-flex items-center gap-1.5">
+                    <a href="{{ url('/nosotros') }}" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all inline-flex items-center gap-1.5">
                         <i class="bi bi-people-fill text-blue-600"></i>
                         <span>Nosotros</span>
                     </a>
-                    <a href="{{ url('/catalogo') }}" class="px-4 py-2 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all inline-flex items-center gap-1.5">
+                    <a href="{{ url('/catalogo') }}" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all inline-flex items-center gap-1.5">
                         <i class="bi bi-grid-3x3-gap-fill"></i>
-                        <span>Catálogo de Productos</span>
+                        <span>Catálogo</span>
                     </a>
-                    <a href="{{ url('/contacto') }}" class="px-3.5 py-2 rounded-xl text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all inline-flex items-center gap-1.5">
+                    <a href="{{ url('/contacto') }}" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all inline-flex items-center gap-1.5">
                         <i class="bi bi-envelope-fill text-blue-600"></i>
                         <span>Contacto</span>
+                    </a>
+
+                    <!-- ICONO Y CONTADOR DEL CARRITO DE COMPRAS EN EL ENCABEZADO -->
+                    <a href="{{ url('/carrito') }}" class="relative ml-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-amber-900 bg-amber-100/80 hover:bg-amber-200 border border-amber-300 shadow-sm transition-all inline-flex items-center gap-2">
+                        <i class="bi bi-cart3 text-amber-700 text-base"></i>
+                        <span>Carrito</span>
+                        <span class="bg-amber-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">
+                            {{ $itemsEnCarrito }}
+                        </span>
                     </a>
                 </nav>
 
@@ -76,10 +90,11 @@
                 <a href="{{ url('/inicio') }}" class="hover:text-blue-600">🏠 Inicio</a>
                 <a href="{{ url('/nosotros') }}" class="hover:text-blue-600">👥 Nosotros</a>
                 <a href="{{ url('/catalogo') }}" class="hover:text-blue-600">🛍️ Catálogo</a>
+                <a href="{{ url('/carrito') }}" class="hover:text-blue-600">🛒 Carrito ({{ $itemsEnCarrito }})</a>
                 <a href="{{ url('/contacto') }}" class="hover:text-blue-600">📩 Contacto</a>
             </div>
             <p class="text-xs text-slate-400 font-medium">
-                © {{ date('Y') }} Sitio Web Cliente Final en Laravel - Consumo de datos desde API REST vía HttpClient sin base de datos local.
+                © {{ date('Y') }} Sitio Web Cliente Final - Carrito gestionado vía Sesiones en Laravel sin base de datos local.
             </p>
         </div>
     </footer>

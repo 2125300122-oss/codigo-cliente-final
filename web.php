@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaginasController;
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\CarritoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,12 @@ Route::get('/catalogo/detalle/{id}', [CatalogoController::class, 'show']);
 
 // 📩 5. Página Contacto
 Route::get('/contacto', [PaginasController::class, 'contacto']);
+
+// 🛒 6. RUTAS DEL CARRITO DE COMPRAS (GESTIONADO VÍA SESIÓN)
+Route::get('/carrito', [CarritoController::class, 'index']);
+Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar']);
+Route::post('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar']);
+Route::get('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar']);
+Route::post('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar']);
+Route::get('/carrito/vaciar', [CarritoController::class, 'vaciar']);
+Route::post('/carrito/vaciar', [CarritoController::class, 'vaciar']);

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaginasController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\UsuarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +36,23 @@ Route::get('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar']);
 Route::post('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar']);
 Route::get('/carrito/vaciar', [CarritoController::class, 'vaciar']);
 Route::post('/carrito/vaciar', [CarritoController::class, 'vaciar']);
+
+// 👤 7. RUTAS DE AUTENTICACIÓN Y GESTIÓN DE PERFIL DE USUARIO / CLIENTE (CON TOKEN SANCTUM)
+Route::get('/usuario/registro', [UsuarioController::class, 'vistaRegistro']);
+Route::post('/usuario/registro', [UsuarioController::class, 'registro']);
+
+Route::get('/usuario/login', [UsuarioController::class, 'vistaLogin']);
+Route::post('/usuario/login', [UsuarioController::class, 'login']);
+
+Route::get('/usuario/logout', [UsuarioController::class, 'logout']);
+Route::post('/usuario/logout', [UsuarioController::class, 'logout']);
+
+Route::get('/usuario/perfil', [UsuarioController::class, 'perfil']);
+Route::post('/usuario/perfil/actualizar', [UsuarioController::class, 'actualizarPerfil']);
+Route::post('/usuario/perfil/imagen', [UsuarioController::class, 'actualizarImagen']);
+Route::post('/usuario/perfil/password', [UsuarioController::class, 'actualizarPassword']);
+
+// Alias/Compatibilidad
+Route::get('/login', [UsuarioController::class, 'vistaLogin']);
+Route::post('/login', [UsuarioController::class, 'login']);
+Route::get('/logout', [UsuarioController::class, 'logout']);

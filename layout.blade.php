@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cliente Final - Catálogo Farmacéutico & Carrito</title>
+    <title>Cliente Final - Catálogo, Carrito & Autenticación de Usuario</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -27,9 +27,11 @@
     @php
         $carritoSesion = session('carrito', []);
         $itemsEnCarrito = count($carritoSesion);
+        $clienteSesion = session('cliente');
+        $userToken = session('userToken');
     @endphp
 
-    <!-- ENCABEZADO Y MENÚ DE NAVEGACIÓN (HEADER CON ICONO DE CARRITO) -->
+    <!-- ENCABEZADO Y MENÚ DE NAVEGACIÓN (HEADER) -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -41,11 +43,11 @@
                     </div>
                     <div>
                         <span class="text-lg font-black text-slate-900 tracking-tight block leading-tight">FarmaCliente</span>
-                        <span class="text-[10px] font-bold text-blue-600 tracking-widest uppercase block">Sitio Web & Carrito</span>
+                        <span class="text-[10px] font-bold text-blue-600 tracking-widest uppercase block">Sitio Web & Usuario</span>
                     </div>
                 </a>
 
-                <!-- MENÚ DE NAVEGACIÓN Y BOTÓN CARRITO -->
+                <!-- MENÚ DE NAVEGACIÓN Y OPCIONES DE USUARIO -->
                 <nav class="flex items-center gap-2">
                     <a href="{{ url('/inicio') }}" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all inline-flex items-center gap-1.5">
                         <i class="bi bi-house-door-fill text-blue-600"></i>
@@ -64,14 +66,36 @@
                         <span>Contacto</span>
                     </a>
 
-                    <!-- ICONO Y CONTADOR DEL CARRITO DE COMPRAS EN EL ENCABEZADO -->
-                    <a href="{{ url('/carrito') }}" class="relative ml-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-amber-900 bg-amber-100/80 hover:bg-amber-200 border border-amber-300 shadow-sm transition-all inline-flex items-center gap-2">
+                    <!-- ICONO Y CONTADOR DEL CARRITO DE COMPRAS -->
+                    <a href="{{ url('/carrito') }}" class="relative px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-amber-900 bg-amber-100/80 hover:bg-amber-200 border border-amber-300 shadow-sm transition-all inline-flex items-center gap-2">
                         <i class="bi bi-cart3 text-amber-700 text-base"></i>
                         <span>Carrito</span>
                         <span class="bg-amber-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">
                             {{ $itemsEnCarrito }}
                         </span>
                     </a>
+
+                    <!-- OPCIONES DINÁMICAS SEGÚN ESTADO DE AUTENTICACIÓN DEL USUARIO -->
+                    @if ($userToken)
+                        <div class="flex items-center gap-2 ml-2 pl-2 border-l border-slate-200">
+                            <a href="{{ url('/usuario/perfil') }}" class="px-3 py-2 rounded-xl text-xs font-black text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all inline-flex items-center gap-1.5">
+                                <i class="bi bi-person-circle text-blue-600 text-base"></i>
+                                <span>{{ $clienteSesion['nombres'] ?? 'Mi Perfil' }}</span>
+                            </a>
+                            <a href="{{ url('/usuario/logout') }}" class="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all" title="Cerrar Sesión">
+                                <i class="bi bi-box-arrow-right text-base"></i>
+                            </a>
+                        </div>
+                    @else
+                        <div class="flex items-center gap-1.5 ml-2 pl-2 border-l border-slate-200">
+                            <a href="{{ url('/usuario/login') }}" class="px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-blue-600 transition-all">
+                                Iniciar Sesión
+                            </a>
+                            <a href="{{ url('/usuario/registro') }}" class="px-3 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-all">
+                                Registrarse
+                            </a>
+                        </div>
+                    @endif
                 </nav>
 
             </div>
@@ -94,7 +118,7 @@
                 <a href="{{ url('/contacto') }}" class="hover:text-blue-600">📩 Contacto</a>
             </div>
             <p class="text-xs text-slate-400 font-medium">
-                © {{ date('Y') }} Sitio Web Cliente Final - Carrito gestionado vía Sesiones en Laravel sin base de datos local.
+                © {{ date('Y') }} Sitio Web Cliente Final - Autenticación de Usuario con Token Sanctum en Laravel.
             </p>
         </div>
     </footer>

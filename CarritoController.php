@@ -30,9 +30,15 @@ class CarritoController extends Controller
 
     /**
      * ➕ Agregar Producto al Carrito (POST /carrito/agregar/{id})
+     * Restricción: Requiere haber iniciado sesión previamente.
      */
     public function agregar(Request $request, $id)
     {
+        // VERIFICAR QUE EL USUARIO HAYA INICIADO SESIÓN
+        if (!session()->has('userToken')) {
+            return redirect('/usuario/login')->with('error', 'Necesitas iniciar sesión para agregar cosas al carrito de compras.');
+        }
+
         // 1. Consultar información del producto desde la API REST
         $response = Http::get($this->getApiUrl('/productos/' . $id));
         $data = $response->json();
